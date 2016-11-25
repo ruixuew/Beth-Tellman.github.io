@@ -1,0 +1,13 @@
+.jumbotron {
+	background-image: url('http://people.fas.harvard.edu/~mckinnon/photos/banner-post-doc.jpg');
+	color:black;
+	background-size: cover;
+	min-height:300px;
+	margin-top:-20px;
+	margin-bottom:10px;
+}
+
+body {
+padding-top: 0x;
+padding-bottom: 100px;
+}
