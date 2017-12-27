@@ -19,9 +19,9 @@
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
 </head>
@@ -29,7 +29,7 @@
 <body>
 
     <!-- Navigation -->
-      <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -83,6 +83,142 @@
                 <!-- Blog Post -->
 
                 <!-- Title -->
+                <h2>Twitter, bots, and New Yorker captions</h2>
+
+                <!-- Author -->
+                <p class="lead">
+                    by <a href="index.html">Karen McKinnon</a>
+                </p>
+
+                <hr>
+
+                <!-- Date/Time -->
+                <p><span class="glyphicon glyphicon-time"></span> Posted on December 27, 2017</p>
+
+                <hr>
+
+                <!-- Post Content -->
+                <p>As an occassional twitter user, I was well aware of the number of bots on the platform. The ones I interacted with were not created by Russian trolls to spread fake news, but rather by normal folks in order to retweet content that was of interest, such as new journal articles in a field or tweets related to their company. Over the Thanksgiving holiday, I realized that a bot had even entered the family, as I saw my brother's <a href = "https://twitter.com/danielmckinn0n">twitter account</a> tweet away while he was sailing the South Pacific, far from the nearest wifi router.</p>
+
+                <p>So, with the Christmas holiday over but vacation still continuing, I decided it was time to make my first twitter bot. The hardest part of making a bot is surely deciding what it should do: retweet tweets about a topic? offer its own content created through machine learning algorithms? I opted to merge this mini project with a larger, in-progress one that is based upon the thousands of New Yorker captions that are submited to the weekly caption contest but do not win. At this time, these losing captions are simply listed <a href = "https://contest.newyorker.com/CaptionContest.aspx?tab=archive">online</a> in an inset scroll box deep within the caption contest website. Why not make a bot that randomly tweets the losing captions, so they too have their chance to shine?</p>
+
+                <p>The harder work of scraping the New Yorker website had already been done by my partner in crime, so I began with a database of old cartoons and captions to work with. The next steps were relatively straightforward thanks to the twitter API and some python infrastructure built around it.</p>
+
+                <p><b>First</b>, decide whether you want to turn your pre-existing twitter account into a bot, or create a new one. Since I created a new one, I needed to first create an email address for it (I used gmail), and then create the twitter account. Although twitter accounts themselves don't require your phone number, the app that ultimately allows your handle to be a bot does, so do use your phone number when registering.</p>
+
+                <p><b>Second</b>, go to https://apps.twitter.com/, log in as your new (or old) twitter account, and click "Create New App". Fill out the necessary information (name, description, website), agree  to the terms of service, and you're good to go! Note that you need to give your application read and write access to the account; this is the default and should not be changed.</p>
+
+
+                <p><b>Third</b>, make your bot! I created my bot using python. If you want to use python but don't have it on your machine, I suggest downloading and installing the anaconda distribution (information and links <a href = "https://conda.io/docs/user-guide/install/download.html">here</a>). You will also need to install tweepy via:</p>
+
+                <p><code>pip install tweepy</code></p>
+
+                <p>at the command line.</p>
+
+                <p>This first code snippet gives your bot access to the twitter account via the tokens we got through setting up the app. The ones below are stand-ins; look for yours in the tab titled "Keys and Access Tokens" in the twitter Application Management window.</p>
+
+                <pre><code>
+import tweepy
+CONSUMER_KEY = 'aaaa'
+CONSUMER_SECRET = 'bbbb'
+ACCESS_KEY = 'cccc'
+ACCESS_SECRET = 'dddd'
+auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
+api = tweepy.API(auth)
+                </code></pre>
+
+                <p>This first code snippet gives your bot access to the twitter account via the tokens we got through setting up the app. The ones below are stand-ins; look for yours in the tab titled "Keys and Access Tokens" in the twitter Application Management window. The following snippet is specific to my bot: I'm reading through my database of New Yorker images and captions, and grabbing a random set.</p>
+
+                <pre><code>
+import glob
+# The directory holding the New Yorker images and captions
+dirbase = '/Users/karenmckinnon/Dropbox/newyorker/Scrape/Captions/'
+dirlocs = glob.glob('%s*' % dirbase)
+
+# Make a list of all the contest numbers
+contest_numbers = list()
+for dirloc in dirlocs:
+parsed = dirloc.split('_')
+if len(parsed) == 1: continue
+contest_numbers.append(parsed[-1])
+
+# Choose a random contest
+import numpy as np
+contest_use = np.random.choice(contest_numbers)
+
+# The file containing the image and the captions
+image = '%scontest_%s/comic_%s.jpg' % (dirbase, contest_use, contest_use)
+captions = '%scontest_%s/contest_%s.json' % (dirbase, contest_use, contest_use)
+
+# Check that the image and caption files actually exist (in some cases, the scraping was unsuccessful for one or the other)
+while (not os.path.isfile(image)) | (not os.path.isfile(captions)):
+contest_use = np.random.choice(contest_numbers)
+image = '%scontest_%s/comic_%s.jpg' % (dirbase, contest_use, contest_use)
+captions = '%scontest_%s/contest_%s.json' % (dirbase, contest_use, contest_use)
+
+# Read the file containing all the submitted captions for a given contest
+import json
+with open(captions, encoding='utf-8') as data:
+lines = json.load(data)
+
+# Choose a random caption
+this_caption = str(np.random.choice(lines))
+                </code></pre>
+
+                <p>And now we can use the API to update the status of our bot with the image and text:</p>
+
+                <pre><code>
+status = api.update_with_media(image, status=this_caption)
+
+print('Uploaded caption for contest %s' % (contest_use))
+                </code></pre>
+
+                <p>
+                    I can now run this script, which I called <code>run_bot.py</code> at the command line via <code>python run_bot.py</code>, and a random image and caption will get uploaded to twitter. But we're not done yet! Ideally, my bot tweet away happily regardless of what I'm doing.
+                </p>
+
+                <p>
+                    For most bots, which tend to focus on retweeting and liking rather than uploading content, a good solution is to keep your bot running all the time on a remote computer, such as an Amazon EC2 instance. Since the bot doesn't require any real compute power, you can get one <a href = "https://aws.amazon.com/ec2/pricing/">for free</a> for at least 12 months.
+                </p>
+
+                <p>
+                    At this time, my bot and I are not <i>quite</i> independent. Since I am currently relying on files that are on my own machine, I've set up a cron job to run my script. However, cron jobs only run when a machine is awake; as such, my bot will only share New Yorker comments when I am on my computer (or have otherwise left it awake). I figured that I wanted my bot to tweet about once a day, and that I'm not on my computer at home too much, so I set my cron job to run at the top of every hour. If my computer is awake at that time, my bot will tweet.
+                </p>
+
+                <p>
+                    Cron jobs can be a little finicky to work with, but the basic idea is that the user indicates how often the job should run in the <code>crontab</code> file. You can edit your crontab file via <code>crontab -e</code>, which will open up a text editor. My script runs via:
+                </p>
+
+                <p>
+                    <code>0 * * * * python /Users/karenmckinnon/Documents/twitterbot/run_bot.py > /Users/karenmckinnon/Documents/twitterbot/output.log</code>
+                </p>
+
+                <p>
+                    where the 0 indicates that the code runs at 0 minutes, and the following four stars mean that it runs every hour, every day of the month, every month, and every day of the week. If my computer was on all the time, I would change it to something like <code>0 0 * * *</code> so that it would run at 0:00UTC each day.
+                </p>
+
+                <p>
+                    You can (and should!) follow my New Yorker caption bot at <a href = "https://twitter.com/nyercaptions">@nyercaptions</a>, and create your own!
+
+                </p>
+
+
+
+                <hr>
+
+
+                <!-- Posted Comments -->
+
+
+            </div>
+
+            <!-- Blog Post Content Column -->
+            <div class="col-lg-8">
+
+                <!-- Blog Post -->
+
+                <!-- Title -->
                 <h2>Hello, Descartes Labs</h2>
 
                 <!-- Author -->
@@ -98,62 +234,58 @@
                 <hr>
 
                 <!-- Post Content -->
-                <p>A few years ago, when I was in the weeds of my PhD, I found myself in a long conversation
-                with a colleague about what motivated our research. While this may seem like a basic question, it is easy to get
-                lost in the details of disseration research without keeping one's eye on the big picture. After some thought, I
-                realized that, at the end of the day, I was motivated to understand the parts of the earth system that arguably have the
-                largest human impact: temperature and precipitation variability over the global land masses.</p>
+                <p>
+                    A few years ago, when I was in the weeds of my PhD, I found myself in a long conversation with a colleague about what motivated our research. While this may seem like a basic question, it is easy to get lost in the details of disseration research without keeping one's eye on the big picture. After some thought, I realized that, at the end of the day, I was motivated to understand the parts of the earth system that arguably have the largest human impact: temperature and precipitation variability over the global land masses.
+                </p>
 
-                <p>Since then, my research has tackled a number of applied questions. Can we predict heat waves at timescales beyond
-                the typical weather forecast? How is the probability of extreme temperature events changing with time? How uncertain
-                are we about future climate projections because of the inherent, underlying variability of the climate system?</p>
+                <p>
+                    Since then, my research has tackled a number of applied questions. Can we predict heat waves at timescales beyond the typical weather forecast? How is the probability of extreme temperature events changing with time? How uncertain are we about future climate projections because of the inherent, underlying variability of the climate system?
+                </p>
 
-                <p>As of tomorrow, I'll be taking this trajectory one step further when I join <a href = "https://www.descarteslabs.com/">Descartes Labs</a>
-                as a data scientist.</p> While the company is doing many cool things (try playing around with the <a href = "https://www.descarteslabs.com/search.html">GeoVisual Search!</a>),
-                I'm particularly excited about working with them to use a wide variety of data sources -- from remote sensing to weather -- in order to improve
-                forecasts of important and relevant quantities like crop yields.</p>
+                <p>
+                    As of tomorrow, I'll be taking this trajectory one step further when I join <a href = "https://www.descarteslabs.com/">Descartes Labs</a> as an applied scientist. While the company is doing many cool things (try playing around with the <a href = "https://www.descarteslabs.com/search.html">GeoVisual Search!</a>), I'm particularly excited about working with them to use a wide variety of data sources -- from remote sensing to weather -- in order to improve forecasts of important and relevant quantities like crop yields.
+                </p>
 
-                <p>Thanks to the advent of cheaper satellites, combined with the long-term investment of our governments into
-                various remote sensing platforms, we have an amazing amount of information at our fingertips. Now is an opportune time
-                to figure out how to draw actionable intelligence out of this vast trove of data. I'm excited to join the team at Descartes
-                to see what we can learn.</p>
+                <p>
+                    Thanks to the advent of cheaper satellites, combined with the long-term investment of our governments into various remote sensing platforms, we have an amazing amount of information at our fingertips. Now is an opportune time to figure out how to draw actionable intelligence out of this vast trove of data. I'm excited to join the team at Descartes to see what we can learn.
+                </p>
 
 
-                <hr>
+                                <hr>
 
 
-                <!-- Posted Comments -->
+                                <!-- Posted Comments -->
 
 
-            </div>
+                            </div>
 
-            <!-- Blog Sidebar Widgets Column -->
+                            <!-- Blog Sidebar Widgets Column -->
 
 
-        </div>
-        <!-- /.row -->
+                        </div>
+                        <!-- /.row -->
 
-        <hr>
+                        <hr>
 
-        <!-- Footer -->
-        <footer>
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>&copy; Karen Aline McKinnon 2017</p>
-                </div>
-            </div>
-            <!-- /.row -->
-        </footer>
+                        <!-- Footer -->
+                        <footer>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <p>&copy; Karen Aline McKinnon 2017</p>
+                                </div>
+                            </div>
+                            <!-- /.row -->
+                        </footer>
 
-    </div>
-    <!-- /.container -->
+                    </div>
+                    <!-- /.container -->
 
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
+                    <!-- jQuery -->
+                    <script src="js/jquery.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+                    <!-- Bootstrap Core JavaScript -->
+                    <script src="js/bootstrap.min.js"></script>
 
-</body>
+                </body>
 
-</html>
+                </html>
