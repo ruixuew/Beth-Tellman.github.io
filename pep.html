@@ -34,6 +34,13 @@
   ga('send', 'pageview');
 
 </script>
+<style>
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
   </head>
 
   <body>
@@ -65,20 +72,22 @@
         <h3>Predictions of Eastern US hot days based on the Pacific Extreme Pattern</h3>
 
         <p>In collaboration with co-authors Andy Rhines, Martin Tingley, and Peter Huybers,
-        I recently published a paper regarding long-lead predictions of hot days in the Eastern
+        I published a paper regarding long-lead predictions of hot days in the Eastern
         United States. You can find the paper <a href = "http://www.nature.com/ngeo/journal/v9/n5/full/ngeo2687.html">here</a>.</p>
 
-        <p>Each summer since then, I have been making experimental, real-time predictions based on the methodology outlined in the above paper. In short, a specific sea surface temperature (SST) anomaly pattern in the midlatitude Pacific (the Pacific Extreme Pattern) tends to precede hot weather in the Eastern United States at lead times up to seven weeks. We can therefore use the realtime, observed SST anomalies to estimate a probability of hot days over the next seven weeks.</p>
+        <p>Each summer since then, I have been making experimental, realtime predictions based on the methodology outlined in the above paper. In short, a specific sea surface temperature (SST) anomaly pattern in the midlatitude Pacific (the Pacific Extreme Pattern) tends to precede hot weather in the Eastern United States at lead times up to seven weeks. We can therefore use the realtime, observed SST anomalies to estimate a probability of hot days over the next seven weeks.</p>
 
         <p>Below is the most recent SST anomaly data in the Pacific from the NOAA OISSTv2 dataset. The associated date is in the lower righthand corner; the dataset is often a few days delayed. The Pacific Extreme Pattern region is outlined in black.</p>
 
-        <p><img src="./pep_figures/sst.map.current.png" width="700" style="margin:50px 0px"></p>
+        <p><img src="./pep_figures/sst.map.current.png" width="600" style="width:50%;"></p>
 
         <p>Using these observations, we can make predictions over the next 50 days for peak summer hot day probabilities (June 24 - August 22). The gray horizontal line indiciates the climatological probability of a hot day: 15%. Predictions above this line indicate greater-than-average probability of hot weather, while predictions below it indciate lower-than-average probabilities. The thicker black line shows the most recent predictions (i.e. from the most recently observed SSTs), while the progressively lighter lines show predictions over the prior 3 days.</p>
 
-		<p><img src="./pep_figures/timeseries.current.png" width="700" style="margin:50px 0px"></p>
+		<p><img src="./pep_figures/timeseries.current.png" width="1000" style="width:90%;"></p>
 
-        The image files for older predictions this season can be found <a href="https://github.com/karenamckinnon/karenamckinnon.github.io/tree/master/pep_figures">here</a>.
+        <p>The image files for older predictions this season can be found <a href="https://github.com/karenamckinnon/karenamckinnon.github.io/tree/master/pep_figures">here</a>.</p>
+
+        <p>Questions, comments, thoughts? <a href="mailto:karen.mckinnon@post.harvard.edu"> karen.mckinnon (at) post (dot) harvard (dot) edu</a></p>
 
 
         <h3>Predictions of Eastern US hot days based on the Pacific Extreme Pattern</h3>
@@ -107,10 +116,10 @@
         effects of climate change. This formulation was intentional, because we wanted to make sure that we were not simply
         developing a model that could predict a trend, rather than intraseasonal variability in hot weather. That said,
         the Eastern US has not shown large increases in summer daily maximum temperature over the past 35 years (see my recent
-        paper <a href="https://dl.dropboxusercontent.com/u/3608275/published/McKinnonEA2016_JGRA.pdf">here</a>). </p>
+        paper <a href="https://www.dropbox.com/s/guekx2qlhb2a1up/McKinnonEA2016_JGRA.pdf?raw=1">here</a>). </p>
 
         <p>The image below (similar to Supplemental Figures 17-50 from the original paper, which can be found
-        <a href="https://dl.dropboxusercontent.com/u/3608275/published/McKinnonEA2016_NatureGeoscience_SI.pdf">here</a>) summarizes
+        <a href="https://www.dropbox.com/s/mfn3z97fggqdy6h/McKinnonEA2016_NatureGeoscience_SI.pdf?raw=1">here</a>) summarizes
         the predictions (upper panel) as well as the observed values of T95 (lower panel). The cool colors in the upper panel
         indicate predictions for lower than average probability of hot days, whereas the warm colors indicate higher than
         average probability of hot days as a function of lead time (vertical axis) and date predicted (horizontal axis). For
@@ -120,7 +129,7 @@
         As noted above, two non-consecutive days during the summer exceeded this threshold slightly, but overall the
         summer was average.</p>
 
-		<p><img src="https://dl.dropboxusercontent.com/u/3608275/predictions/2016plot.png" class="img-responsive" alt="PEP validation" width="700" style="margin:50px 0px"></p>
+		<p><img src="./pep_figures/2016plot.png" class="img-responsive" alt="PEP validation" width="700" style="width:60%;"></p>
 
         <p><b>To conclude, the predictions for 2016 were relatively accurate. The predictions generally suggested
         that the summer would have slightly lower-than-average probabilities of hot days, and the rate of hot days was
@@ -131,7 +140,7 @@
         plagued much of the East Coast during peak summer. Second, the predictions are for a relatively large region,
         and so were not able to predict the <a href="https://www.ncdc.noaa.gov/file/august-2016-us-divisional-avg-temp-ranks-mapgif">record warmth in the Northeast during August</a>.</p>
 
-        <p>Questions, comments, thoughts? <a href="mailto:mckinnon@ucar.edu"> mckinnon (at) ucar (dot) edu</a></p>
+
 	</div> <!-- /container -->
 
 
