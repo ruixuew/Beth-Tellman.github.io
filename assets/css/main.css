@@ -1990,7 +1990,7 @@
 			display: inline-block;
 			float: left;
 			margin-bottom: 3em;
-			width: 50%;
+			width: 100%;
 		}
 
 			.feature-grid .feature .content {
@@ -2004,12 +2004,13 @@
 				.feature-grid .feature .image img {
 					display: inline;
 					max-width: 100%;
+					max-height: 100%;
 				}
 
 			.feature-grid .feature:nth-child(odd) .content, .feature-grid .feature:nth-child(odd) .image {
-				float: right;
-				margin-right: 5%;
-				text-align: right;
+				float: left;
+				margin-left: 5%;
+				text-align: left;
 			}
 
 			.feature-grid .feature:nth-child(even) .content, .feature-grid .feature:nth-child(even) .image {
